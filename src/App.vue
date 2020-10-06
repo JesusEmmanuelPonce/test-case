@@ -1,12 +1,15 @@
 <template>
-  <div class="container">
+  <div class="container employees">
     <div class="row mt-5 justify-content-between">
       <div class="col-12 col-md-3">
         <el-input v-model="searchInput" />
       </div>
-      <div class="col-12 col-md-2">
-        <el-button @click="dialogVisible = true">
+      <div class="col-12 col-md-3">
+        <button @click="dialogVisible = true" class="add">
           Agregar
+        </button>
+        <el-button @click="showUSD">
+          Ver en USD
         </el-button>
       </div>
     </div>
@@ -22,7 +25,10 @@
                 Nombre
               </th>
               <th>
-                Salario
+                Salario MXN
+              </th>
+              <th v-if="salaryUSD">
+                Salario USD
               </th>
               <th>
                 Empresa
@@ -37,8 +43,13 @@
               <td>
                 {{ c.name }}
               </td>
-              <td>
+              <td class="text-right" :class="c.salary > 10000 ? 'salaryGood' : 'salaryBad' ">
+                <!-- {{ c.salary.toFixed(2) }} -->
                 {{ currency(c.salary) }}
+              </td>
+              <td  class="text-right" v-if="salaryUSD">
+                <!-- {{ showUSD(c.salary.toFixed(2)) }} -->
+                {{ showUSD(c.salary) }}
               </td>
               <td>
                 {{ c.enterprise }}
@@ -114,30 +125,31 @@ export default {
       //     {
       //       id: 1,
       //       name: 'Yisus',
-      //       price: 9200,
+      //       salary: 10000,
       //       enterprise: 'Microsoft'
       //     },
       //     {
       //       id: 2,
       //       name: 'Emanuel',
-      //       price: 10000.123,
+      //       salary: 20000,
       //       enterprise: 'Oracle'
       //     },
       //     {
       //       id: 3,
       //       name: 'MArio',
-      //       price: 21000.563,
+      //       salary: 3000,
       //       enterprise: 'Bungie'
       //     },
       //     {
       //       id: 4,
       //       name: 'Other Yisus',
-      //       price: 9200,
+      //       salary: 4000,
       //       enterprise: 'Microsoft'
       //     }
-      //   ]
-      }
-    },
+      //   ],
+      salaryUSD: false  
+    }
+  },
   computed: {
     displayCategories () {
       const employees = this.employees
@@ -169,6 +181,14 @@ export default {
       const numberFormat = new Intl.NumberFormat('en-US', option)
       return numberFormat.format(amount)
     },
+    showUSD (amount) {
+      this.salaryUSD = true
+      amount = parseFloat(amount)
+      amount = amount * 21.50
+      const option = { style: 'currency', currency: 'USD' }
+      const numberFormat = new Intl.NumberFormat('en-US', option)
+      return numberFormat.format(amount)
+    },
     edit(id) {
       console.log(id)
     },
@@ -180,5 +200,23 @@ export default {
 </script>
 
 <style>
-
+.employees .add{
+  border: 2px solid rgb(4, 180, 4);
+  color: rgb(4, 180, 4);
+  background: none;
+  border-radius: 5px;
+  padding: .4rem 1rem;
+  margin: 0 .4rem;
+  transition: ease-in-out .3s;
+}
+.employees .add:hover{
+  color: #fff;
+  background: rgb(4, 180, 4);
+}
+.salaryGood{
+  color: rgb(4, 180, 4);
+}
+.salaryBad{
+  color: rgb(190, 9, 9);
+}
 </style>
