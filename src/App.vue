@@ -5,7 +5,7 @@
         <el-input v-model="searchInput" />
       </div>
       <div class="col-12 col-md-3">
-        <button @click="dialogVisible = true" class="add">
+        <button @click="dialogVisible = true" class="btn">
           Agregar
         </button>
         <el-button @click="showUSD">
@@ -44,11 +44,9 @@
                 {{ c.name }}
               </td>
               <td class="text-right" :class="c.salary > 10000 ? 'salaryGood' : 'salaryBad' ">
-                <!-- {{ c.salary.toFixed(2) }} -->
                 {{ currency(c.salary) }}
               </td>
               <td  class="text-right" v-if="salaryUSD">
-                <!-- {{ showUSD(c.salary.toFixed(2)) }} -->
                 {{ showUSD(c.salary) }}
               </td>
               <td>
@@ -88,9 +86,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">Cancel</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">
+        <button type="primary" @click="submitForm('ruleForm')" class="btn">
           Agregar
-        </el-button>
+        </button>
       </span>
     </el-dialog>
   </div>
@@ -121,32 +119,6 @@ export default {
         },
       searchInput: '',
       employees: [],
-      // employees: [
-      //     {
-      //       id: 1,
-      //       name: 'Yisus',
-      //       salary: 10000,
-      //       enterprise: 'Microsoft'
-      //     },
-      //     {
-      //       id: 2,
-      //       name: 'Emanuel',
-      //       salary: 20000,
-      //       enterprise: 'Oracle'
-      //     },
-      //     {
-      //       id: 3,
-      //       name: 'MArio',
-      //       salary: 3000,
-      //       enterprise: 'Bungie'
-      //     },
-      //     {
-      //       id: 4,
-      //       name: 'Other Yisus',
-      //       salary: 4000,
-      //       enterprise: 'Microsoft'
-      //     }
-      //   ],
       salaryUSD: false  
     }
   },
@@ -184,7 +156,7 @@ export default {
     showUSD (amount) {
       this.salaryUSD = true
       amount = parseFloat(amount)
-      amount = amount * 21.50
+      amount = amount / 21.50
       const option = { style: 'currency', currency: 'USD' }
       const numberFormat = new Intl.NumberFormat('en-US', option)
       return numberFormat.format(amount)
@@ -200,7 +172,7 @@ export default {
 </script>
 
 <style>
-.employees .add{
+.employees .btn{
   border: 2px solid rgb(4, 180, 4);
   color: rgb(4, 180, 4);
   background: none;
