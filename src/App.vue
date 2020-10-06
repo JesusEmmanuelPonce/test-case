@@ -85,7 +85,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('ruleForm')">Cancel</el-button>
+        <el-button @click="resetForm('ruleForm')" type="danger">Cancel</el-button>
         <button type="primary" @click="submitForm('ruleForm')" class="btn">
           Agregar
         </button>
@@ -96,11 +96,14 @@
 
 <script>
 import Vue from 'vue'
+import uuid from 'uuid/dist/v4'
 export default {
   data () {
     return {
       dialogVisible: false,
+      dialogEdit: false,
        ruleForm: {
+          id: '',
           name: '',
           salary: '',
           enterprise: ''
@@ -119,6 +122,7 @@ export default {
         },
       searchInput: '',
       employees: [],
+      editEmployees: [],
       salaryUSD: false  
     }
   },
@@ -135,6 +139,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.id = uuid()
           this.employees.push(Vue.util.extend({}, this.ruleForm))
           this.resetForm(formName)
         } else {
@@ -162,7 +167,12 @@ export default {
       return numberFormat.format(amount)
     },
     edit(id) {
+      this.dialogEdit = true
       console.log(id)
+      let result = this.employees.filter(c => c.id === id)
+      result = JSON.stringify(result)
+      this.editEmployees = JSON.parse(result)
+      console.log(this.editEmployees)
     },
     remove(id) {
       console.log(id)
