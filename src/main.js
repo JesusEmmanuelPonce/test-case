@@ -12,7 +12,7 @@ Vue.use(BootstrapVue)
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://localhost:4000/api/'
+axios.defaults.baseURL = 'https://case-test-app.herokuapp.com/api/'
 
 new Vue({
   render: h => h(App),

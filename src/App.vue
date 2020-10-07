@@ -8,9 +8,9 @@
         <button @click="dialogAdd = true" class="button">
           Agregar
         </button>
-        <el-button type="warning" plain @click="showUSD">
+         <button @click="showUSD" class="button">
           Ver en USD
-        </el-button>
+        </button>
       </div>
     </div>
     <div class="row mt-5 justify-content-center">
@@ -43,7 +43,7 @@
               <td>
                 {{ c.name }}
               </td>
-              <td class="text-right" :class="c.salary > 10000 ? 'salaryGood' : 'salaryBad' ">
+              <td class="text-right" :class="c.salary < 10000 ? 'salaryBad' : 'salaryGood' ">
                 {{ currency(c.salary) }}
               </td>
               <td  class="text-right" v-if="salaryUSD">
@@ -97,7 +97,32 @@
     <!-- Edit -->
     <el-dialog
       :visible.sync="dialogEdit"
+      :before-close="onCloseCamAndModal"
     >
+      <div class="camera">
+        <div class="webCam">
+          <WebCam
+            class=""
+            ref="webcam"
+            :deviceId="deviceId"
+            width="100%"
+            height="50%"
+            :isFrontCam="frontCam"
+          />
+        </div>
+        <div class="imgCam">
+          <img class="img-fluid" :src="this.img" alt="">
+        </div>
+      </div>
+      <button @click="onStart" class="button">
+        Abrir camara
+      </button>
+      <button @click="onStop" class="button">
+        Cerrar camara
+      </button>
+      <button @click="onCapture" class="button">
+        Tomar foto
+      </button>
       <el-form >
         <el-form-item>
           <span>
@@ -113,7 +138,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="dialogEdit = false">
+        <el-button type="danger" @click="onCloseCamAndModal">
           Cancelar
         </el-button>
         <button type="primary" @click="editSubmit(editEmployees._id)" class="button">
@@ -126,9 +151,15 @@
 
 <script>
 import axios from 'axios'
+import { WebCam } from 'vue-cam-vision'
 export default {
+  components: {
+    WebCam
+  },
   data () {
     return {
+      frontCam: false,
+      img: null,
       totalEmployees: [],
       editEmployees: [],
       dialogAdd: false,
@@ -214,6 +245,7 @@ export default {
     },
     edit(id) {
       this.dialogEdit = true
+      console.log(this.imagen) 
       axios.get(`employee/${id}`)
         .then(response => {
           this.editEmployees = response.data
@@ -228,10 +260,11 @@ export default {
       const employeeObj = {
         name,
         salary
-      }
+      }   
       axios.put(`employee/update/${id}`, employeeObj )
         .then(() => {
           this.dialogEdit = false
+          this.onStop()
           this.list()
         })
         .catch(error => {
@@ -246,6 +279,19 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    onStart () {
+      this.$refs.webcam.start()
+    },
+    onStop () {
+      this.$refs.webcam.stop()
+    },
+    onCloseCamAndModal () {
+      this.$refs.webcam.stop()
+      this.dialogEdit = false
+    },
+    async onCapture () {
+      this.img = await this.$refs.webcam.capture()
     }
   }
 } 
@@ -268,4 +314,13 @@ export default {
   color: rgb(4, 180, 4)
 .salaryBad
   color: rgb(190, 9, 9)
+
+// Camera
+.camera
+  display: flex
+  margin-bottom: 1rem
+  .webCam
+    width: 50%
+  .imgCam
+    width: 50%
 </style>
