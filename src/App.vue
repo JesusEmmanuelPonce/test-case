@@ -2,13 +2,13 @@
   <div class="container employees">
     <div class="row mt-5 justify-content-between">
       <div class="col-12 col-md-3">
-        <el-input v-model="searchInput" />
+        <el-input v-model="searchInput" suffix-icon="el-icon-search"/>
       </div>
       <div class="col-12 col-md-3">
-        <button @click="dialogAdd = true" class="btn">
+        <button @click="dialogAdd = true" class="button">
           Agregar
         </button>
-        <el-button @click="showUSD">
+        <el-button type="warning" plain @click="showUSD">
           Ver en USD
         </el-button>
       </div>
@@ -86,8 +86,10 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('ruleForm')" type="danger">Cancel</el-button>
-        <button type="primary" @click="submitForm('ruleForm')" class="btn">
+        <el-button @click="resetForm('ruleForm')" type="danger">
+          Cancelar
+        </el-button>
+        <button type="primary" @click="submitForm('ruleForm')" class="button">
           Agregar
         </button>
       </span>
@@ -111,8 +113,10 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="danger">Cancel</el-button>
-        <button type="primary" @click="editSubmit(editEmployees._id)" class="btn">
+        <el-button type="danger" @click="dialogEdit = false">
+          Cancelar
+        </el-button>
+        <button type="primary" @click="editSubmit(editEmployees._id)" class="button">
           Editar
         </button>
       </span>
@@ -247,24 +251,21 @@ export default {
 } 
 </script>
 
-<style>
-.employees .btn{
-  border: 2px solid rgb(4, 180, 4);
-  color: rgb(4, 180, 4);
-  background: none;
-  border-radius: 5px;
-  padding: .4rem 1rem;
-  margin: 0 .4rem;
-  transition: ease-in-out .3s;
-}
-.employees .add:hover{
-  color: #fff;
-  background: rgb(4, 180, 4);
-}
-.salaryGood{
-  color: rgb(4, 180, 4);
-}
-.salaryBad{
-  color: rgb(190, 9, 9);
-}
+<style lang="sass" scoped>
+.employees 
+  .button
+    border: 2px solid rgb(4, 180, 4)
+    color: rgb(4, 180, 4)
+    background: none
+    border-radius: 5px
+    padding: .4rem 1rem
+    margin: 0 .4rem
+    transition: ease-in-out .3s
+    &:hover
+      color: #fff
+      background: rgb(4, 180, 4)
+.salaryGood
+  color: rgb(4, 180, 4)
+.salaryBad
+  color: rgb(190, 9, 9)
 </style>
